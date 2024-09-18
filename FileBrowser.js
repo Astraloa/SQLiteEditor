@@ -40,6 +40,15 @@ exports.FileBrowser = /** @class */(function () { // class FileBrowser
     FileBrowser.prototype.list = function () {
         return this.file.list().map(str => str);
     }
+    /**
+     * create empty file
+     * @param {string} file_name 
+     * @returns {boolean}
+     */
+    FileBrowser.prototype.createEmptyFile = function(file_name) {
+        let file_path = this.path + (this.path.endsWith('/') ? '' : '/') + file_name;
+        return java.io.File(file_path).createNewFile();
+    }
 
     return FileBrowser;
 })();
