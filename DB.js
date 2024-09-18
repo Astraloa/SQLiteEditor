@@ -60,7 +60,7 @@ exports.DB = /** @class */ (function () { // class DB
                 this.cursor = this.cursor.close(), void 0;
                 return res;
             }
-            case 'field': {
+            case 'row': {
                 let table_name = config.table = config.table || void 0;
                 if (!table_name) throw new TypeError('invaild table name: ' + table_name);
                 this.cursor = this.db.rawQuery("SELECT * FROM " + table_name + " LIMIT 1", []);
