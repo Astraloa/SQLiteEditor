@@ -88,7 +88,7 @@ let DB = /** @class */ (function () { // class DB
                 this.cursor = this.cursor.close(), void 0;
                 return res;
             }
-            case 'column': {
+            case 'row': {
                 config = config || {};
                 let start = config.start = config.start || 0;
                 let end = config.end = config.end || 1000;
