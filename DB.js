@@ -7,6 +7,11 @@
 
 exports.DB = /** @class */ (function () { // class DB
     let { SQLiteDatabase } = android.database.sqlite;
+    
+    /**
+     * class DB
+     * @param {string} path - DB file path
+     */
 
     function DB(path) {
         Object.defineProperty(this, 'path', {
@@ -16,10 +21,13 @@ exports.DB = /** @class */ (function () { // class DB
         this.db = SQLiteDatabase.openDatabase(path, 0);
         this.cursor;
     };
-
     DB.prototype.toString = function () {
         return "[class DB]";
     };
+    /**
+     * 데이터베이스 닫기
+     * @returns {void|Error}
+     */
     DB.prototype.close = function () {
         try {
             if (this.db) this.db.close();
@@ -29,9 +37,18 @@ exports.DB = /** @class */ (function () { // class DB
             return err;
         }
     };
+    /**
+     * 데이터베이스 다시 열기
+     */
     DB.prototype.open = function () {
         if (!this.db) this.db = SQLiteDatabase.openDatabase(this.path, 0);
     }
+    /**
+     * 데이터베이스 값 불러오기
+     * @param {string} type
+     * @param {object} config 
+     * @returns {array|object}
+     */
     DB.prototype.load = function (type, config) {
         switch (type) {
             case 'table': {
@@ -40,6 +57,14 @@ exports.DB = /** @class */ (function () { // class DB
                 while (this.cursor.moveToNext()) {
                     res.push(this.cursor.getString(0));
                 }
+                this.cursor = this.cursor.close(), void 0;
+                return res;
+            }
+            case 'field': {
+                let table_name = config.table = config.table || void 0;
+                if (!table_name) throw new TypeError('invaild table name: ' + table_name);
+                this.cursor = this.db.rawQuery("SELECT * FROM " + table_name + " LIMIT 1", []);
+                let res = this.cursor.getColumnNames();
                 this.cursor = this.cursor.close(), void 0;
                 return res;
             }
@@ -71,6 +96,7 @@ exports.DB = /** @class */ (function () { // class DB
                         res.push(row);
                     }
                 }
+                this.cursor = this.cursor.close(), void 0;
                 return res;
             }
             default: {
@@ -78,6 +104,11 @@ exports.DB = /** @class */ (function () { // class DB
             }
         }
     }
+    /**
+     * 데이터베이스 생성
+     * @param {string} type 
+     * @param {object} config 
+     */
     DB.prototype.create = function (type, config) {
         config = config || {};
         switch (type) {
@@ -123,7 +154,7 @@ exports.DB = /** @class */ (function () { // class DB
             case 'field': {
                 let table_name = config.table = config.table || void 0;
                 if (!table_name) throw new TypeError('invaild table name: ' + table_name);
-                let field = config.field = config.field || {
+                let field = config.fields = config.fields || {
                     key: "_id",
                     type: "INTEGER"
                 }; // It's too frustrated..
@@ -136,6 +167,11 @@ exports.DB = /** @class */ (function () { // class DB
             }
         }
     }
+    /**
+     * 데이터베이스 수정
+     * @param {string} type 
+     * @param {object} config 
+     */
     DB.prototype.edit = function (type, config) {
         switch (type) {
             case 'table': {
@@ -180,6 +216,11 @@ exports.DB = /** @class */ (function () { // class DB
             }
         }
     }
+    /**
+     * 데이터베이스 삭제
+     * @param {string} type 
+     * @param {object} config 
+     */
     DB.prototype.delete = function (type, config) {
         switch (type) {
             case 'table': {
