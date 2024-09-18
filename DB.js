@@ -60,7 +60,7 @@ exports.DB = /** @class */ (function () { // class DB
                 this.cursor = this.cursor.close(), void 0;
                 return res;
             }
-            case 'row': {
+            case 'field': {
                 let table_name = config.table = config.table || void 0;
                 if (!table_name) throw new TypeError('invaild table name: ' + table_name);
                 this.cursor = this.db.rawQuery("SELECT * FROM " + table_name + " LIMIT 1", []);
@@ -68,7 +68,7 @@ exports.DB = /** @class */ (function () { // class DB
                 this.cursor = this.cursor.close(), void 0;
                 return res;
             }
-            case 'column': {
+            case 'row': {
                 config = config || {};
                 let start = config.start = config.start || 0;
                 let end = config.end = config.end || 1000;
@@ -79,10 +79,10 @@ exports.DB = /** @class */ (function () { // class DB
                 this.cursor = this.db.rawQuery("SELECT * FROM " + table + (where ? ' WHERE' + where[0] : '') + " LIMIT " + (end - start) + " OFFSET " + start, (where ? where[1] : []));
                 let res = [];
                 while (this.cursor.moveToNext()) {
+                    let row = {};
                     for (let key of this.cursor.getColumnNames()) {
                         let idx = this.cursor.getColumnIndex(key);
                         let type = this.cursor.getType(idx);
-                        let row = {};
 
                         if (!type) {
                             row[key] = null;
@@ -92,9 +92,9 @@ exports.DB = /** @class */ (function () { // class DB
                             row[key] = this.cursor.getString(idx);
                         } else if (type == 4) {
                             row[key] = this.cursor.getBlob(idx);
-                        }
-                        res.push(row);
+                        }  
                     }
+                    res.push(row);
                 }
                 this.cursor = this.cursor.close(), void 0;
                 return res;
