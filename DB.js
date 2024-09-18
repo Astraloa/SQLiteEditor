@@ -18,7 +18,7 @@ exports.DB = /** @class */ (function () { // class DB
             value: path,
             writable: false
         });
-        this.db = SQLiteDatabase.openDatabase(path, 0);
+        this.db = SQLiteDatabase.openDatabase(path, null, 0);
         this.cursor;
     };
     DB.prototype.toString = function () {
@@ -41,7 +41,7 @@ exports.DB = /** @class */ (function () { // class DB
      * 데이터베이스 다시 열기
      */
     DB.prototype.open = function () {
-        if (!this.db) this.db = SQLiteDatabase.openDatabase(this.path, 0);
+        if (!this.db) this.db = SQLiteDatabase.openDatabase(this.path, null, 0);
     }
     /**
      * 데이터베이스 값 불러오기
