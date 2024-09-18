@@ -14,10 +14,7 @@ exports.DB = /** @class */ (function () { // class DB
      */
 
     function DB(path) {
-        Object.defineProperty(this, 'path', {
-            value: path,
-            writable: false
-        });
+        this.path = path;
         this.db = SQLiteDatabase.openDatabase(path, null, 0);
         this.cursor;
     };
