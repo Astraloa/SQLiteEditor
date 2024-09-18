@@ -6,3 +6,5 @@
 > # Introduce
 >
 > [DB class](DB.js) script
+> 
+> [DB class Docs](https://Astraloa.github.io/)
