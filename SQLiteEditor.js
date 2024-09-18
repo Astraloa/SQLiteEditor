@@ -27,7 +27,7 @@ let RECENT_TABLE; // 최근 간섭 테이블
 
 let DB = /** @class */ (function () { // class DB
     let { SQLiteDatabase } = android.database.sqlite;
-
+    
     /**
      * class DB
      * @param {string} path - DB file path
@@ -95,14 +95,14 @@ let DB = /** @class */ (function () { // class DB
                 let table = config.table = config.table || void 0;
                 if (table == void 0 || !table) throw new TypeError('Unknown Table Name: \'' + table + '\'');
                 let where;
-                if (config.where && Array.isArray(config.where)) where = this.build('where', config.where);
+                if(config.where && Array.isArray(config.where)) where = this.build('where', config.where);
                 this.cursor = this.db.rawQuery("SELECT * FROM " + table + (where ? ' WHERE' + where[0] : '') + " LIMIT " + (end - start) + " OFFSET " + start, (where ? where[1] : []));
                 let res = [];
                 while (this.cursor.moveToNext()) {
+                    let row = {};
                     for (let key of this.cursor.getColumnNames()) {
                         let idx = this.cursor.getColumnIndex(key);
                         let type = this.cursor.getType(idx);
-                        let row = {};
 
                         if (!type) {
                             row[key] = null;
@@ -112,9 +112,9 @@ let DB = /** @class */ (function () { // class DB
                             row[key] = this.cursor.getString(idx);
                         } else if (type == 4) {
                             row[key] = this.cursor.getBlob(idx);
-                        }
-                        res.push(row);
+                        }  
                     }
+                    res.push(row);
                 }
                 this.cursor = this.cursor.close(), void 0;
                 return res;
