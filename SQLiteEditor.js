@@ -41,8 +41,11 @@ let DB = /** @class */ (function () { // class DB
         this.db = SQLiteDatabase.openDatabase(path, null, 0);
         this.cursor;
     };
-    DB.prototype.toString = function () {
+    DB.toString = function () {
         return "[class DB]";
+    };
+    DB.prototype.toString = function () {
+        return "[object DB]";
     };
     /**
      * 데이터베이스 닫기
@@ -156,7 +159,7 @@ let DB = /** @class */ (function () { // class DB
                     table_name: table_name,
                     row: row
                 });
-                let statement = db.compileStatement(SQL);
+                let statement = this.db.compileStatement(SQL);
                 Object.keys(config.row).forEach((key, int) => {
                     let value = config.row[key];
                     if (typeof value == 'number') {
