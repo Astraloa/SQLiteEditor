@@ -301,7 +301,7 @@ exports.DB = /** @class */ (function () { // class DB
                     if (int > 0) str.push((data.bridge || 'and').toUpperCase());
                     str.push(data.key);
                     inject.push(data.value);
-                    switch (data.condition.toLowerCase()) {
+                    switch ((data.condition || '').toLowerCase()) {
                         case 'gt':
                         case 'up': {
                             str.push('<');
