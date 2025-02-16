@@ -99,7 +99,7 @@ let DB = /** @class */ (function () { // class DB
                 if (table == void 0 || !table) throw new TypeError('Unknown Table Name: \'' + table + '\'');
                 let where;
                 if(config.where && Array.isArray(config.where)) where = this.build('where', config.where);
-                this.cursor = this.db.rawQuery("SELECT * FROM " + table + (where ? ' WHERE' + where[0] : '') + " LIMIT " + (end - start) + " OFFSET " + start, (where ? where[1] : []));
+                this.cursor = this.db.rawQuery("SELECT * FROM " + table + (where ? ' WHERE ' + where[0] : '') + " LIMIT " + (end - start) + " OFFSET " + start, (where ? where[1] : []));
                 let res = [];
                 while (this.cursor.moveToNext()) {
                     let row = {};
