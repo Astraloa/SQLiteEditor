@@ -319,7 +319,7 @@ let DB = /** @class */ (function () { // class DB
                 config.forEach((data, int) => {
                     let str = [];
                     if (int > 0) str.push((data.bridge || 'and').toUpperCase());
-                    str.push('?');
+                    str.push(data.key);
                     inject.push(data.value);
                     switch (data.condition.toLowerCase()) {
                         case 'gt':
@@ -349,7 +349,7 @@ let DB = /** @class */ (function () { // class DB
                             break;
                         }
                     };
-                    str.push(data.key);
+                    str.push('?');
                     res.push(str.join(' '));
                 });
                 return [res.join(' '), inject];
